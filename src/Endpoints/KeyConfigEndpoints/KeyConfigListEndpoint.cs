@@ -1,5 +1,6 @@
 using FastEndpoints;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using NetCorePal.Extensions.Dto;
 using OpenClawWalletServer.Application.Queries;
 using OpenClawWalletServer.Domain.Enums;
@@ -12,6 +13,7 @@ namespace OpenClawWalletServer.Endpoints.KeyConfigEndpoints;
 /// </summary>
 [Tags("KeyConfigs")]
 [HttpGet("/api/v1/key-config/list")]
+[AllowAnonymous]
 public class KeyConfigListEndpoint(
     IMediator mediator
 ) : EndpointWithoutRequest<ResponseData<List<KeyConfigListItem>>>

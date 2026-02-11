@@ -1,7 +1,9 @@
+using System.Net;
 using System.Reflection;
 using Ckb.Sdk.Core;
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using NetCorePal.Extensions.DependencyInjection;
@@ -70,7 +72,7 @@ public class Program
                         await appContext.KeyConfigs.AddAsync(
                             KeyConfig.Create(
                                 AddressType.Ckb,
-                                addressInfo.PrivateKey,
+                                addressInfo.Address,
                                 addressInfo.PublicKey,
                                 addressInfo.PrivateKey
                             ),
@@ -126,19 +128,19 @@ public class Program
         #endregion
 
         // Cookie 认证
-        // builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        //     .AddCookie(configureOptions =>
-        //         {
-        //             configureOptions.Events.OnRedirectToLogin = context =>
-        //             {
-        //                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-        //                 return Task.CompletedTask;
-        //             };
-        //             configureOptions.Cookie.Name = "token";
-        //             configureOptions.ExpireTimeSpan = TimeSpan.FromDays(1);
-        //             configureOptions.SlidingExpiration = true;
-        //         }
-        //     );
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(configureOptions =>
+                {
+                    configureOptions.Events.OnRedirectToLogin = context =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Task.CompletedTask;
+                    };
+                    configureOptions.Cookie.Name = "token";
+                    configureOptions.ExpireTimeSpan = TimeSpan.FromDays(1);
+                    configureOptions.SlidingExpiration = true;
+                }
+            );
 
         var app = builder.Build();
 

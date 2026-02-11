@@ -46,12 +46,14 @@ public class SignRecord : Entity<SignRecordId>, IAggregateRoot
     /// 创建签名记录
     /// </summary>
     public static SignRecord Create(
-        AddressType addressType
+        AddressType addressType,
+        string content
     )
     {
         var record = new SignRecord
         {
             AddressType = addressType,
+            Content = content,
             SignTime = DateTime.Now
         };
         return record;
