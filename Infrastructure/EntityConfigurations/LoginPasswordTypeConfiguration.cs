@@ -1,7 +1,7 @@
-using OpenClawWalletServer.Domain.AggregatesModel.LoginPasswordAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NetCorePal.Extensions.Repository.EntityFrameworkCore;
+using OpenClawWalletServer.Domain.AggregatesModel.LoginPasswordAggregate;
 
 namespace OpenClawWalletServer.Infrastructure.EntityConfigurations;
 

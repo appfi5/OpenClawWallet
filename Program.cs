@@ -1,13 +1,13 @@
 using System.Net;
 using System.Reflection;
-using OpenClawWalletServer.Extensions;
-using OpenClawWalletServer.Infrastructure;
-using OpenClawWalletServer.Options;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using NetCorePal.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using NetCorePal.Extensions.Domain.Json;
+using OpenClawWalletServer.Extensions;
+using OpenClawWalletServer.Infrastructure;
+using OpenClawWalletServer.Options;
 using OpenClawWalletServer.Utils;
 
 namespace OpenClawWalletServer;
@@ -43,11 +43,10 @@ public class Program
         // 配置 DataProtect
         builder.Services.AddDataProtection().PersistKeysToDbContext<KeyDbContext>();
 
-        builder.Services.AddMediatR(
-            configuration => configuration
-                .RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly())
-                .AddOpenBehavior(typeof(AgentValidationBehavior<,>))
-                .AddUnitOfWorkBehaviors()
+        builder.Services.AddMediatR(configuration => configuration
+            .RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly())
+            .AddOpenBehavior(typeof(AgentValidationBehavior<,>))
+            .AddUnitOfWorkBehaviors()
         );
 
         builder.Services.AddUnitOfWork<ApplicationDbContext>();
@@ -58,7 +57,7 @@ public class Program
         builder.Configuration.GetSection("Ckb").Bind(ckbOption);
 
         builder.Services.Configure<EthOptions>(builder.Configuration.GetSection("Eth"));
-        
+
         // 当前环境 配置
         var currentEnvironmentOptions = new CurrentEnvironmentOptions();
         builder.Services.Configure<CurrentEnvironmentOptions>(builder.Configuration.GetSection("CurrentEnvironment"));
@@ -82,19 +81,19 @@ public class Program
         builder.Services.AddHttpContextAccessor();
 
         // Cookie 认证
-        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
-            configureOptions =>
-            {
-                configureOptions.Events.OnRedirectToLogin = context =>
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(configureOptions =>
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    return Task.CompletedTask;
-                };
-                configureOptions.Cookie.Name = "token";
-                configureOptions.ExpireTimeSpan = TimeSpan.FromDays(1);
-                configureOptions.SlidingExpiration = true;
-            }
-        );
+                    configureOptions.Events.OnRedirectToLogin = context =>
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Task.CompletedTask;
+                    };
+                    configureOptions.Cookie.Name = "token";
+                    configureOptions.ExpireTimeSpan = TimeSpan.FromDays(1);
+                    configureOptions.SlidingExpiration = true;
+                }
+            );
 
         var app = builder.Build();
 
@@ -122,7 +121,7 @@ public class Program
             app.UseSwagger(options => { options.RouteTemplate = "devops/swagger/{documentName}/swagger.{json|yaml}"; });
             app.UseSwaggerUI(options => { options.RoutePrefix = "devops/swagger"; });
         }
-        
+
         app.UseDefaultFiles();
         app.UseStaticFiles();
         app.MapControllers();

@@ -5,7 +5,6 @@ namespace OpenClawWalletServer.Options;
 /// </summary>
 public class EthOptions
 {
-    
     /// <summary>
     /// Eth Erc20 Transfer Abi
     /// </summary>
@@ -21,7 +20,7 @@ public class EthOptions
                                                           type: 'function',
                                                       }]
                                                       """;
-    
+
     /// <summary>
     /// Eth SafeWallet Abi
     /// </summary>

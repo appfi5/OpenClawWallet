@@ -1,5 +1,5 @@
-using OpenClawWalletServer.Domain.Enums;
 using NetCorePal.Extensions.Domain;
+using OpenClawWalletServer.Domain.Enums;
 
 namespace OpenClawWalletServer.Domain.AggregatesModel.KeyConfigAggregate;
 

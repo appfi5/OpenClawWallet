@@ -46,7 +46,7 @@ public partial class ApplicationDbContext(
     /// 签名日志
     /// </summary>
     public DbSet<SignRecord> SignRecords => Set<SignRecord>();
-    
+
     /// <summary>
     /// 全局配置
     /// </summary>

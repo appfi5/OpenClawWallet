@@ -32,7 +32,7 @@ public class KeyConfigRepository(
                              config.Address == address)
             .FirstAsync(cancellationToken);
     }
-    
+
     /// <summary>
     /// 查配置的地址
     /// </summary>

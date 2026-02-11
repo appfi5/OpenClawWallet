@@ -59,7 +59,7 @@ public class AgentGlobalConfig : Entity<AgentGlobalConfigId>, IAggregateRoot
         SingleTransactionMaxLimit = Convert.ToInt64(singleTransactionMaxLimit * 1000000m);
         UpdatedAt = DateTimeOffset.UtcNow;
     }
-    
+
     public void Delete()
     {
         Deleted = true;

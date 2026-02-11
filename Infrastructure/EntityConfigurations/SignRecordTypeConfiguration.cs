@@ -1,8 +1,8 @@
-using OpenClawWalletServer.Domain.AggregatesModel.SignRecordAggregate;
-using OpenClawWalletServer.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NetCorePal.Extensions.Repository.EntityFrameworkCore;
+using OpenClawWalletServer.Domain.AggregatesModel.SignRecordAggregate;
+using OpenClawWalletServer.Domain.Enums;
 
 namespace OpenClawWalletServer.Infrastructure.EntityConfigurations;
 
@@ -32,7 +32,7 @@ public class SignRecordTypeConfiguration : IEntityTypeConfiguration<SignRecord>
         builder.Property(sr => sr.SignTime)
             .IsRequired()
             .HasDefaultValue(DateTime.MinValue);
-        
+
         builder.Property(ac => ac.Deleted)
             .IsRequired()
             .HasDefaultValue(false);

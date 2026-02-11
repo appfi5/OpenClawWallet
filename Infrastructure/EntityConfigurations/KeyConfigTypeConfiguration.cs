@@ -1,8 +1,8 @@
-using OpenClawWalletServer.Domain.AggregatesModel.KeyConfigAggregate;
-using OpenClawWalletServer.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NetCorePal.Extensions.Repository.EntityFrameworkCore;
+using OpenClawWalletServer.Domain.AggregatesModel.KeyConfigAggregate;
+using OpenClawWalletServer.Domain.Enums;
 
 namespace OpenClawWalletServer.Infrastructure.EntityConfigurations;
 

@@ -43,7 +43,7 @@ public class AgentConfig : Entity<AgentConfigId>, IAggregateRoot
         string apiKey
     )
     {
-        var config =  new AgentConfig
+        var config = new AgentConfig
         {
             ApiKey = apiKey,
             Deleted = false,
