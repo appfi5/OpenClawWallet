@@ -50,6 +50,7 @@ namespace OpenClawWalletServer.Migrations.ApplicationDb
                     SignType = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 0),
                     Address = table.Column<string>(type: "TEXT", maxLength: 256, nullable: false, defaultValue: ""),
                     PrivateKey = table.Column<string>(type: "TEXT", maxLength: 512, nullable: false, defaultValue: ""),
+                    PublicKey = table.Column<string>(type: "TEXT", nullable: false),
                     Deleted = table.Column<bool>(type: "INTEGER", nullable: false, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)),
                     UpdateAt = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified))

@@ -1,10 +1,11 @@
-using System.Net;
 using System.Reflection;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Ckb.Sdk.Core;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using NetCorePal.Extensions.DependencyInjection;
 using NetCorePal.Extensions.Domain.Json;
+using OpenClawWalletServer.Domain.AggregatesModel.KeyConfigAggregate;
+using OpenClawWalletServer.Domain.Enums;
 using OpenClawWalletServer.Extensions;
 using OpenClawWalletServer.Infrastructure;
 using OpenClawWalletServer.Options;
@@ -22,14 +23,17 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        // 配置应用数据库
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(
-                builder.Configuration.GetConnectionString("AppDb"),
-                sqliteOptionsAction: optionBuilder =>
-                    optionBuilder.MigrationsAssembly(typeof(Program).Assembly.FullName)
-            )
-        );
+        // Ckb & Eth 配置
+        var ckbOption = new CkbOptions();
+        builder.Services.Configure<CkbOptions>(builder.Configuration.GetSection("Ckb"));
+        builder.Configuration.GetSection("Ckb").Bind(ckbOption);
+
+        builder.Services.Configure<EthOptions>(builder.Configuration.GetSection("Eth"));
+
+        // 当前环境 配置
+        var currentEnvironmentOptions = new CurrentEnvironmentOptions();
+        builder.Services.Configure<CurrentEnvironmentOptions>(builder.Configuration.GetSection("CurrentEnvironment"));
+        builder.Configuration.GetSection("CurrentEnvironment").Bind(currentEnvironmentOptions);
 
         // 配置密钥数据库
         builder.Services.AddDbContext<KeyDbContext>(options =>
@@ -43,6 +47,40 @@ public class Program
         // 配置 DataProtect
         builder.Services.AddDataProtection().PersistKeysToDbContext<KeyDbContext>();
 
+        // 配置应用数据库
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.UseSqlite(
+                builder.Configuration.GetConnectionString("AppDb"),
+                sqliteOptionsAction: optionBuilder =>
+                    optionBuilder.MigrationsAssembly(typeof(Program).Assembly.FullName)
+            );
+
+            if (currentEnvironmentOptions.IsDebug)
+            {
+                options.UseAsyncSeeding(async (context, _, ct) =>
+                {
+                    var appContext = context as ApplicationDbContext;
+                    var keyConfig = await appContext!.KeyConfigs.FirstOrDefaultAsync(ct);
+                    if (keyConfig is null)
+                    {
+                        var addressInfo = GenAddressUtils.GenSingleAddress(Network.Testnet);
+                        await appContext.KeyConfigs.AddAsync(
+                            KeyConfig.Create(
+                                SignType.Ckb,
+                                addressInfo.PrivateKey,
+                                addressInfo.PublicKey,
+                                addressInfo.PrivateKey
+                            ),
+                            ct
+                        );
+                        await appContext.SaveChangesAsync(ct);
+                    }
+                });
+            }
+        });
+
+
         builder.Services.AddMediatR(configuration => configuration
             .RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly())
             .AddOpenBehavior(typeof(AgentValidationBehavior<,>))
@@ -50,18 +88,6 @@ public class Program
         );
 
         builder.Services.AddUnitOfWork<ApplicationDbContext>();
-
-        // Ckb & Eth 配置
-        var ckbOption = new CkbOptions();
-        builder.Services.Configure<CkbOptions>(builder.Configuration.GetSection("Ckb"));
-        builder.Configuration.GetSection("Ckb").Bind(ckbOption);
-
-        builder.Services.Configure<EthOptions>(builder.Configuration.GetSection("Eth"));
-
-        // 当前环境 配置
-        var currentEnvironmentOptions = new CurrentEnvironmentOptions();
-        builder.Services.Configure<CurrentEnvironmentOptions>(builder.Configuration.GetSection("CurrentEnvironment"));
-        builder.Configuration.GetSection("CurrentEnvironment").Bind(currentEnvironmentOptions);
 
         // 配置仓储
         builder.Services.AddRepositories(typeof(ApplicationDbContext).Assembly);
@@ -81,19 +107,19 @@ public class Program
         builder.Services.AddHttpContextAccessor();
 
         // Cookie 认证
-        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(configureOptions =>
-                {
-                    configureOptions.Events.OnRedirectToLogin = context =>
-                    {
-                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        return Task.CompletedTask;
-                    };
-                    configureOptions.Cookie.Name = "token";
-                    configureOptions.ExpireTimeSpan = TimeSpan.FromDays(1);
-                    configureOptions.SlidingExpiration = true;
-                }
-            );
+        // builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        //     .AddCookie(configureOptions =>
+        //         {
+        //             configureOptions.Events.OnRedirectToLogin = context =>
+        //             {
+        //                 context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+        //                 return Task.CompletedTask;
+        //             };
+        //             configureOptions.Cookie.Name = "token";
+        //             configureOptions.ExpireTimeSpan = TimeSpan.FromDays(1);
+        //             configureOptions.SlidingExpiration = true;
+        //         }
+        //     );
 
         var app = builder.Build();
 
@@ -114,8 +140,6 @@ public class Program
         var keyDbContext = scope.ServiceProvider.GetRequiredService<KeyDbContext>();
         await keyDbContext.Database.MigrateAsync();
 
-        // app.UseSwagger();
-        // app.UseSwaggerUI();
         if (currentEnvironmentOptions.IsDebug)
         {
             app.UseSwagger(options => { options.RouteTemplate = "devops/swagger/{documentName}/swagger.{json|yaml}"; });

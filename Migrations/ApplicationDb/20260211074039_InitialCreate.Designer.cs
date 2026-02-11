@@ -11,7 +11,7 @@ using OpenClawWalletServer.Infrastructure;
 namespace OpenClawWalletServer.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260211065859_InitialCreate")]
+    [Migration("20260211074039_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -116,6 +116,10 @@ namespace OpenClawWalletServer.Migrations.ApplicationDb
                         .HasMaxLength(512)
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
+
+                    b.Property<string>("PublicKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("SignType")
                         .ValueGeneratedOnAdd()

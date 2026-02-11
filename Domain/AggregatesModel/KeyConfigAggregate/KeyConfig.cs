@@ -31,6 +31,11 @@ public class KeyConfig : Entity<KeyConfigId>, IAggregateRoot
     /// 私钥
     /// </summary>
     public string PrivateKey { get; private set; } = string.Empty;
+    
+    /// <summary>
+    /// 地址公钥
+    /// </summary>
+    public string PublicKey { get; private set; } = string.Empty;
 
     /// <summary>
     /// 是否已被删除
@@ -53,6 +58,7 @@ public class KeyConfig : Entity<KeyConfigId>, IAggregateRoot
     public static KeyConfig Create(
         SignType signType,
         string address,
+        string publicKey,
         string privateKey
     )
     {
@@ -60,6 +66,7 @@ public class KeyConfig : Entity<KeyConfigId>, IAggregateRoot
         {
             SignType = signType,
             Address = address,
+            PublicKey = publicKey,
             PrivateKey = privateKey,
             CreatedAt = DateTime.Now,
             UpdateAt = DateTime.Now,

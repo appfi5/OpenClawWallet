@@ -114,6 +114,10 @@ namespace OpenClawWalletServer.Migrations.ApplicationDb
                         .HasColumnType("TEXT")
                         .HasDefaultValue("");
 
+                    b.Property<string>("PublicKey")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("SignType")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
