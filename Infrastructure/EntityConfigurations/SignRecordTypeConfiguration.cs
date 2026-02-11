@@ -20,9 +20,9 @@ public class SignRecordTypeConfiguration : IEntityTypeConfiguration<SignRecord>
         builder.Property(sr => sr.Id)
             .UseGuidVersion7ValueGenerator();
 
-        builder.Property(sr => sr.SignType)
+        builder.Property(sr => sr.AddressType)
             .IsRequired()
-            .HasDefaultValue(SignType.Unknown);
+            .HasDefaultValue(AddressType.Unknown);
 
         builder.Property(sr => sr.Content)
             .IsRequired()

@@ -17,9 +17,9 @@ public class KeyConfigTypeConfiguration : IEntityTypeConfiguration<KeyConfig>
         builder.Property(kc => kc.Id)
             .UseGuidVersion7ValueGenerator();
 
-        builder.Property(kc => kc.SignType)
+        builder.Property(kc => kc.AddressType)
             .IsRequired()
-            .HasDefaultValue(SignType.Unknown);
+            .HasDefaultValue(AddressType.Unknown);
 
         builder.Property(kc => kc.Address)
             .IsRequired()

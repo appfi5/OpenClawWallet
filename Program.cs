@@ -1,5 +1,7 @@
 using System.Reflection;
 using Ckb.Sdk.Core;
+using FastEndpoints;
+using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using NetCorePal.Extensions.DependencyInjection;
@@ -67,7 +69,7 @@ public class Program
                         var addressInfo = GenAddressUtils.GenSingleAddress(Network.Testnet);
                         await appContext.KeyConfigs.AddAsync(
                             KeyConfig.Create(
-                                SignType.Ckb,
+                                AddressType.Ckb,
                                 addressInfo.PrivateKey,
                                 addressInfo.PublicKey,
                                 addressInfo.PrivateKey
@@ -106,6 +108,23 @@ public class Program
 
         builder.Services.AddHttpContextAccessor();
 
+        #region Fast Endpoints
+
+        builder.Services.AddFastEndpoints(o => { o.IncludeAbstractValidators = true; });
+        builder.Services.AddResponseCaching();
+        builder.Services.SwaggerDocument(o =>
+        {
+            o.DocumentSettings = s =>
+            {
+                s.Version = "v1"; //must match what's being passed in to the map method below
+                s.Title = $"OpenClawWalletServer";
+            };
+            //自动Tag路径
+            o.AutoTagPathSegmentIndex = 0;
+        });
+
+        #endregion
+
         // Cookie 认证
         // builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         //     .AddCookie(configureOptions =>
@@ -131,6 +150,18 @@ public class Program
             Directory.CreateDirectory("data");
         }
 
+        app.UseFastEndpoints().UseSwaggerGen(
+            config: c =>
+            {
+                c.Path = $"/openclaw-wallet-server/swagger/{{documentName}}/swagger.{{json|yaml}}";
+            },
+            uiConfig: u =>
+            {
+                u.Path = $"/openclaw-wallet-server/swagger";
+                u.DocumentPath =
+                    $"/openclaw-wallet-server/swagger/{{documentName}}/swagger.{{json|yaml}}";
+            });
+
         using var scope = app.Services.CreateScope();
 
 
@@ -139,12 +170,6 @@ public class Program
         await appDbContext.Database.MigrateAsync();
         var keyDbContext = scope.ServiceProvider.GetRequiredService<KeyDbContext>();
         await keyDbContext.Database.MigrateAsync();
-
-        if (currentEnvironmentOptions.IsDebug)
-        {
-            app.UseSwagger(options => { options.RouteTemplate = "devops/swagger/{documentName}/swagger.{json|yaml}"; });
-            app.UseSwaggerUI(options => { options.RoutePrefix = "devops/swagger"; });
-        }
 
         app.UseDefaultFiles();
         app.UseStaticFiles();

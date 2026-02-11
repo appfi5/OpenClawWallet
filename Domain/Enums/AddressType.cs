@@ -1,9 +1,9 @@
 namespace OpenClawWalletServer.Domain.Enums;
 
 /// <summary>
-/// 签名类型
+/// 地址类型
 /// </summary>
-public enum SignType
+public enum AddressType
 {
     /// <summary>
     /// 未知

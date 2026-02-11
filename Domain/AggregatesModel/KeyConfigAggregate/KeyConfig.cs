@@ -20,7 +20,7 @@ public class KeyConfig : Entity<KeyConfigId>, IAggregateRoot
     /// <summary>
     /// 签名类型
     /// </summary>
-    public SignType SignType { get; private set; } = SignType.Unknown;
+    public AddressType AddressType { get; private set; } = AddressType.Unknown;
 
     /// <summary>
     /// 私钥对应的链上地址
@@ -56,7 +56,7 @@ public class KeyConfig : Entity<KeyConfigId>, IAggregateRoot
     /// 创建密钥配置
     /// </summary>
     public static KeyConfig Create(
-        SignType signType,
+        AddressType addressType,
         string address,
         string publicKey,
         string privateKey
@@ -64,7 +64,7 @@ public class KeyConfig : Entity<KeyConfigId>, IAggregateRoot
     {
         var config = new KeyConfig
         {
-            SignType = signType,
+            AddressType = addressType,
             Address = address,
             PublicKey = publicKey,
             PrivateKey = privateKey,

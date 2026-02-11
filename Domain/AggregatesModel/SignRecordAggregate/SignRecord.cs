@@ -25,7 +25,7 @@ public class SignRecord : Entity<SignRecordId>, IAggregateRoot
     /// <summary>
     /// 签名类型
     /// </summary>
-    public SignType SignType { get; private set; } = SignType.Unknown;
+    public AddressType AddressType { get; private set; } = AddressType.Unknown;
 
     /// <summary>
     /// 签名内容
@@ -46,12 +46,12 @@ public class SignRecord : Entity<SignRecordId>, IAggregateRoot
     /// 创建签名记录
     /// </summary>
     public static SignRecord Create(
-        SignType signType
+        AddressType addressType
     )
     {
         var record = new SignRecord
         {
-            SignType = signType,
+            AddressType = addressType,
             SignTime = DateTime.Now
         };
         return record;

@@ -9,30 +9,32 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Ckb.Sdk" Version="1.0.0-preview.1.2601230630" />
-        <PackageReference Include="FluentValidation" Version="11.5.1"/>
+        <PackageReference Include="Ckb.Sdk" Version="1.0.0-preview.1.2601230630"/>
+        <PackageReference Include="FastEndpoints" Version="7.0.2"/>
+        <PackageReference Include="FastEndpoints.Swagger" Version="7.0.2"/>
+        <PackageReference Include="FastEndpoints.Swagger.Swashbuckle" Version="2.3.0"/>
+        <PackageReference Include="FluentValidation" Version="12.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="9.0.13"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.11"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.3" />
-        <PackageReference Include="NetCorePal.Extensions.Domain.Abstractions" Version="$(NetCorePalVersion)" />
-        <PackageReference Include="NetCorePal.Extensions.Dto" Version="$(NetCorePalVersion)" />
-        <PackageReference Include="NetCorePal.Extensions.Repository.EntityFrameworkCore" Version="$(NetCorePalVersion)" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.3"/>
+        <PackageReference Include="NetCorePal.Extensions.Domain.Abstractions" Version="$(NetCorePalVersion)"/>
+        <PackageReference Include="NetCorePal.Extensions.Dto" Version="$(NetCorePalVersion)"/>
+        <PackageReference Include="NetCorePal.Extensions.Repository.EntityFrameworkCore" Version="$(NetCorePalVersion)"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
-        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="7.2.0" />
-        <PackageReference Include="Nethereum.Web3" Version="5.8.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="7.2.0"/>
+        <PackageReference Include="Nethereum.Web3" Version="5.8.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Application\" />
-      <Folder Include="data\" />
-      <Folder Include="Infrastructure\EntityConfigurations\" />
-      <Folder Include="Infrastructure\Repositories\" />
-      <Folder Include="Migrations\" />
+        <Folder Include="data\"/>
+        <Folder Include="Infrastructure\EntityConfigurations\"/>
+        <Folder Include="Infrastructure\Repositories\"/>
+        <Folder Include="Migrations\"/>
     </ItemGroup>
 
 </Project>
