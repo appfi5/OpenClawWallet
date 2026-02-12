@@ -28,6 +28,10 @@ jobs:
           - runtime: 'osx-x64'
             artifact_name: 'OpenClawWalletServer-osx-x64'
             archive_ext: '.tar.gz'
+          # macOS arm64
+          - runtime: 'osx-arm64'
+            artifact_name: 'OpenClawWalletServer-osx-arm64'
+            archive_ext: '.tar.gz'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -49,11 +53,11 @@ jobs:
         run: |
           cd ./publish-${{ matrix.runtime }}
           if [ "${{ matrix.archive_ext }}" = ".zip" ]; then
-            # Windows 平台使用 zip
-            zip -r ../${{ matrix.artifact_name }}${{ matrix.archive_ext }} .
+            # Windows 平台使用 zip，只打包可执行文件和配置文件
+            zip ../${{ matrix.artifact_name }}${{ matrix.archive_ext }} OpenClawWalletServer.exe appsettings.json appsettings.Production.json
           else
-            # Linux/macOS 平台使用 tar.gz
-            tar czf ../${{ matrix.artifact_name }}${{ matrix.archive_ext }} .
+            # Linux/macOS 平台使用 tar.gz，只打包可执行文件和配置文件
+            tar czf ../${{ matrix.artifact_name }}${{ matrix.archive_ext }} OpenClawWalletServer appsettings.json appsettings.Production.json
           fi
 
       - name: Upload ${{ matrix.artifact_name }} Archive
