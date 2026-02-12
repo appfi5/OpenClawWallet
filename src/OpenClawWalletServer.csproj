@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
         <NetCorePalVersion>3.2.1</NetCorePalVersion>
+        <UserSecretsId>2a641a5b-f380-4d39-83e5-f033e8b0fb95</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
