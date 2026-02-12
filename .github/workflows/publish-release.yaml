@@ -45,9 +45,9 @@ jobs:
       - name: Restore dependencies for ${{ matrix.runtime }}
         run: dotnet restore ${{ env.PROJECT_NAME }} --runtime ${{ matrix.runtime }}
 
-      # publish 命令保持不变，但不再需要 --no-restore
+      # publish 命令添加必要参数
       - name: Build and Publish (${{ matrix.runtime }})
-        run: dotnet publish ${{ env.PROJECT_NAME }} --runtime ${{ matrix.runtime }} --output ./publish-${{ matrix.runtime }} --configuration Release --self-contained true
+        run: dotnet publish ${{ env.PROJECT_NAME }} --runtime ${{ matrix.runtime }} --output ./publish-${{ matrix.runtime }} --configuration Release --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=None -p:DebugSymbols=false
 
       - name: Create Archive for ${{ matrix.runtime }}
         run: |
