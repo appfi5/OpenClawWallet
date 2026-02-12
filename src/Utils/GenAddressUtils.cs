@@ -19,7 +19,7 @@ public class GenAddressUtils
         var keyPair = Keys.CreateSecp256k1KeyPair();
         var ecKeyPair = ECKeyPair.Create(keyPair);
         var privateKey = Numeric.ToHexString(ecKeyPair.GetEncodedPrivateKey());
-        var publicKey = Numeric.ToHexString(ecKeyPair.GetEncodedPublicKey(false));
+        var publicKey = Numeric.ToHexString(ecKeyPair.GetEncodedPublicKey(true));
         var script = Script.GenerateSecp256K1Blake160SignhashAllScript(ecKeyPair);
         var address = new Address(script, network).Encode();
         return new AddressInfo
