@@ -14,7 +14,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "openclaw-wallet-server/swagger",
-      "applicationUrl": "http://localhost:8080",
+      "applicationUrl": "http://localhost:18799",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
