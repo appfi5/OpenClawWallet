@@ -13,7 +13,7 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "openclaw-wallet-server/swagger",
+      "launchUrl": "superise-for-agent/swagger",
       "applicationUrl": "http://localhost:18799",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -209,7 +209,7 @@ install_server() {
 
     echo ""
     echo "✅ SupeRISELocal Server started!"
-    echo "🌐 Access at: http://$IP:18799/openclaw-wallet-server/swagger/index.html"
+    echo "🌐 Access at: http://$IP:18799/superise-for-agent/swagger/index.html"
     echo "📄 Log file: $LOG_FILE"
     echo "📁 Data directory: $INSTALL_DIR/data"
 }
